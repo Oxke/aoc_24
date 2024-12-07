@@ -28,11 +28,6 @@ function isloop(ij, didj, ahi, ahi2)
         end
     end
     global grid
-    # for i in 1:H, j in 1:W, di in -1:1, dj in -1:1
-    #     if ((i, j), (di, dj)) ∈ history && grid[i,j] == '.'
-    #         grid[i, j] = 'X'
-    #     end
-    # end
     return false
 end
 
