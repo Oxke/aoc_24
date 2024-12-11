@@ -8,7 +8,7 @@ H, W = size(grid)
 
 zeros = Set{Tuple{Int, Int}}()
 
-for i in 1:H, j in 1:H
+for i in 1:H, j in 1:W
     if grid[i, j] == 0
         push!(zeros, (i, j))
     end
@@ -33,5 +33,4 @@ for head in zeros
 end
 
 println(N)
-
 
