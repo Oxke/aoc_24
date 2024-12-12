@@ -1,11 +1,12 @@
-lines = readlines("input")
-str = lines |> join
-str = str .|> x -> split(x, ' ')
-str = parse.(Int, str)
-
-stones = Dict{Int, Int}()
-for stone in str
-    stones[stone] = get(stones, stone, 0) + 1
+function parse_input()
+    lines = readlines("input")
+    str = lines |> join .|> x -> split(x, ' ')
+    str = parse.(Int, str)
+    stones = Dict{Int, Int}()
+    for stone in str
+        stones[stone] = get(stones, stone, 0) + 1
+    end
+    return stones
 end
 
 function blink(stones)
@@ -24,10 +25,11 @@ function blink(stones)
     return b_stones
 end
 
-for _ in 1:75 # part 1: 25, part 2: 75
-    global stones
-    stones = blink(stones)
+function main(N, stones)
+    for _ in 1:N # part 1: 25, part 2: 75
+        stones = blink(stones)
+    end
+    stones |> values |> sum
 end
 
-stones |> values |> sum |> println
-
+main(75, parse_input()) |> println
