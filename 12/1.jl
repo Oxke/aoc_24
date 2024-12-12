@@ -6,35 +6,6 @@ function parse_input(lines=nothing, str=nothing, grid=nothing)
     return lines, str, grid
 end
 
-function cc_border(border, point)
-    res = Vector{Tuple{Int, Int}}()
-    push!(res, point)
-    i = 1
-    while i <= length(res)
-        cy, cx = res[i]
-        for d in [-2, 2]
-            ny = cy%2==1 ? cy : cy + d
-            nx = cx%2==1 ? cx : cx + d
-            if (ny, nx) ∈ border
-                (ny, nx) ∈ res || push!(res, (ny, nx))
-            end
-        end
-        i += 1
-    end
-    return Set(res)
-end
-
-function rborder(border)
-    n = 0
-    while !isempty(border)
-        n += 1
-        point = pop!(border)
-        ccb = cc_border(border, point)
-        border = setdiff(border, ccb)
-    end
-    return n
-end
-
 function cc(grid, point)
     H, W = size(grid)
     plant = grid[point...]
@@ -74,8 +45,7 @@ function main(lines=nothing, str=nothing, grid=nothing)
         point = pop!(points)
         interior, border, plant = cc(grid, point)
         points = setdiff(points, interior)
-        res += length(interior) * rborder(border)
-        # println(plant, ": ", length(interior), " x ", rborder(border))
+        res += length(interior) * length(border)
     end
     res
 end
