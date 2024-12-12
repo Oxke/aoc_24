@@ -12,9 +12,9 @@ function cc_border(border, point)
     i = 1
     while i <= length(res)
         cy, cx = res[i]
-        for d in [-2, 2]
-            ny = cy%2==1 ? cy : cy + d
-            nx = cx%2==1 ? cx : cx + d
+        for d in [-3, 3]
+            ny = cy%3==0 ? cy + d : cy
+            nx = cx%3==0 ? cx + d : cx
             if (ny, nx) ∈ border
                 (ny, nx) ∈ res || push!(res, (ny, nx))
             end
@@ -52,7 +52,7 @@ function cc(grid, point)
             if 1 <= ny <= H && 1 <= nx <= W && grid[ny, nx] == plant
                 (ny, nx) ∈ vec_interior || push!(vec_interior, (ny, nx))
             else
-                push!(border, (2cy+dy, 2cx+dx))
+                push!(border, (3cy+dy, 3cx+dx))
             end
         end
         i += 1
@@ -75,7 +75,6 @@ function main(lines=nothing, str=nothing, grid=nothing)
         interior, border, plant = cc(grid, point)
         points = setdiff(points, interior)
         res += length(interior) * rborder(border)
-        # println(plant, ": ", length(interior), " x ", rborder(border))
     end
     res
 end
