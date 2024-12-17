@@ -48,9 +48,9 @@ end
 # mod 8 change only the first element of output, going through all the values 0
 # to 7
 function match_pr(program::Vector{Int}, wrong::Int, a=0)
+    wrong == 0 && return a
     for c in 0:7
         if run_thing(a<<3 + c, 0, 0, program) == program[wrong:end]
-            wrong == 1 && return a<<3 + c
             ret = match_pr(program, wrong-1, a<<3 + c)
             ret != -1 && return ret
         end
