@@ -1,0 +1,3 @@
+BenchmarkTools.Trial: 1 sample with 1 evaluation.
+ Single result which took 11.414 s (1.83% GC) to evaluate,
+ with a memory estimate of 1.67 GiB, over 27909623 allocations.
