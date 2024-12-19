@@ -11,12 +11,10 @@ function parse_input(lines=nothing, str=nothing, grid=nothing, H=nothing, W=noth
     return walls, 70, 70, (0, 0), (70, 70)
 end
 
-function cc(walls, w, H, W)
+function cc!(walls, w, H, W, vis)
     w in walls || return false
-    vis = Set()
     stack = [w]
     while !isempty(stack)
-        print("\r", length(stack))
         i, j = pop!(stack)
         (i, j) in vis && continue
         push!(vis, (i, j))
@@ -30,10 +28,10 @@ function cc(walls, w, H, W)
 end
 
 function cc_cut(walls, H, W)
+    vis = Set()
     for i in 0:H
-        cc(walls, (i, 0), H, W) && return true
+        cc!(walls, (i, 0), H, W, vis) && return true
     end
-    println()
     return false
 end
 
@@ -42,7 +40,6 @@ function main(walls, H, W, start, goal)
     hi = length(walls)
     while lo < hi
         m = (lo + hi) ÷ 2
-        println(m)
         if cc_cut(walls[1:m], H, W)
             hi = m
         else
