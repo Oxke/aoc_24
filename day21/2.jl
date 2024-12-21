@@ -40,18 +40,10 @@ function nextcell(cur, m)
 end
 
 function keypad((si, sj), (gi, gj), avoid)
-    if si > gi && sj < gj
-        s = '>'^(gj-sj) * '^'^(si-gi)
-    end
-    if si <= gi && sj < gj
-        s = '>'^(gj-sj) * 'v'^(gi-si)
-    end
-    if si > gi && sj >= gj
-        s = '<'^(sj-gj) * '^'^(si-gi)
-    end
-    if si <= gi && sj >= gj
-        s = 'v'^(sj-gj) * '<'^(gi-si)
-    end
+    s = ""
+    (di, dj) = (gi-si, gj-sj)
+    s *= di > 0 ? 'v'^di : '^'^(abs(di))
+    s *= dj > 0 ? '>'^dj : '<'^(abs(dj))
 
     res = []
     for p in permutations(s)
@@ -73,15 +65,12 @@ shortest(s, stop=26, level=stop) = get!(memo, (s, level)) do
     last = level == stop ? NUMKEYPAD['A'] : DIRKEYPAD['A']
     avoid = level == stop ? (4, 1) : (1, 1)
     for c in s
+        cd = level == stop ? NUMKEYPAD[c] : DIRKEYPAD[c]
+        ms = keypad(last, cd, avoid)
         if level == 0
-            cd = DIRKEYPAD[c]
-            res += length(keypad(last, cd, avoid)[1])
-        elseif level == stop
-            cd = NUMKEYPAD[c]
-            res += minimum(shortest(m, stop, level-1) for m in keypad(last, cd, avoid))
+            res += length(ms[1])
         else
-            cd = DIRKEYPAD[c]
-            res += minimum(shortest(m, stop, level-1) for m in keypad(last, cd, avoid))
+            res += minimum(shortest(m, stop, level-1) for m in ms)
         end
         last = cd
     end
@@ -93,7 +82,7 @@ complexity(l, code) = l * parse(Int, code[1:3])
 function main(lines, str, grid, H, W)
     S = 0
     for line in lines
-        lstr = shortest(line, 2)
+        lstr = shortest(line, 25)
         S += complexity(lstr, line)
     end
     return S
