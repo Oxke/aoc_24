@@ -29,8 +29,8 @@ function parse_input(lines=nothing, str=nothing, grid=nothing, H=nothing, W=noth
 end
 
 function part1(G, vert_s2n, vert_n2s)
-    cycles = simplecycles_limited_length(G, 3)
-    triangles = filter(cycle -> length(cycle) == 3, cycles)
+    triangles = simplecycles_limited_length(G, 3)
+    filter!(cycle -> length(cycle) == 3, triangles)
     triangles = map(triangle -> sort([vert_n2s[v] for v in triangle]), triangles)
     count(t -> any(startswith('t'), t), triangles) ÷ 2
 end
