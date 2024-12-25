@@ -1,11 +1,12 @@
 function parse_input(lines=nothing, str=nothing, grid=nothing, W=nothing, H=nothing)
     lines = readlines("input")
-    lines2 = readlines("input_C")
+    lines2 = readlines("input_C2")
     str = lines |> join
 
     dif = []
     for (i, line) in enumerate(lines)
         if lines[i] != lines2[i]
+            println(line)
             push!(dif, split(line, " ")[end])
         end
     end

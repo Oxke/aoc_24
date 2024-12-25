@@ -18,26 +18,23 @@ function parse_input(lines=nothing, str=nothing, grid=nothing, W=nothing, H=noth
     return wires, ops
 end
 
+GATES = Dict("AND" => &, "OR" => |, "XOR" => ⊻)
+
+function get_num(wires, c::Char)
+    N = 0
+    for (k, v) in wires
+        k[1] == c && (N += v * 2^parse(Int, k[2:3]))
+    end
+    return N
+end
+
 function main(wires, ops)
     for _ in 1:length(ops), op in ops
         if haskey(wires, op[1]) && haskey(wires, op[2]) && !haskey(wires, op[4])
-            if op[3] == "AND"
-                wires[op[4]] = wires[op[1]] & wires[op[2]]
-            elseif op[3] == "OR"
-                wires[op[4]] = wires[op[1]] | wires[op[2]]
-            elseif op[3] == "XOR"
-                wires[op[4]] = wires[op[1]] ⊻ wires[op[2]]
-            end
+            wires[op[4]] = GATES[op[3]](wires[op[1]], wires[op[2]])
         end
     end
-    N = 0
-    for (k, v) in wires
-        if k[1] == 'z'
-            b = v * 2^parse(Int, k[2:3])
-            N += b
-        end
-    end
-    return N
+    get_num(wires, 'z')
 end
 
 main(parse_input()...) |> println
